@@ -1,7 +1,8 @@
-const userModel = require("../models/user");
+const User = require("../models/user");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const { authMiddleware } = require("../middlewares/authMiddleware");
 const z = require("zod");
 
 const signupBody = z.object({
@@ -25,14 +26,14 @@ const signup = async (req, res) => {
       });
     }
     const { firstName, lastName, username, password } = parsedData;
-    const present = await userModel.findOne({ username });
+    const present = await User.findOne({ username });
     if (present) {
       return res.status(411).send({
         msg: "User Already Exists",
       });
     }
     const hashed = await bcrypt.hash(password, 12);
-    const add = await userModel.create({
+    const add = await User.create({
       firstName,
       lastName,
       username,
@@ -68,7 +69,7 @@ const signin = async (req, res) => {
   if (!success) {
     return res.status(411).send({ message: "Error while logging in" });
   }
-  const present = await userModel.findOne({ username });
+  const present = await User.findOne({ username });
   if (!present) {
     return res.status(411).send({
       message: "Error while logging in",
@@ -84,5 +85,38 @@ const signin = async (req, res) => {
   const token = jwt.sign({ userId }, JWT_SECRET);
   return res.status(200).send({ token, message: "LoggedIn successfully" });
 };
+const updatebody = z.object({
+  firstName: z.string(),
+  lastName: z.string(),
+  password: z.string(),
+});
+const update = async (req, res) => {
+  const { success, data: parsedData } = updatebody.safeParse(req.body);
+  const { firstName, lastName, password } = parsedData;
+  if (!success) {
+    res.status(411).json({
+      message: "Error while updating information",
+    });
+    const u = await User.updateOne({ id: req.userId }, req.body);
+    res.status(200).json({
+      message: "Updated Success",
+    });
+  }
+};
 
-module.exports = { signup, signin };
+const find = async (req, res) => {
+  const filter = req.query.filter || "";
+  const f = await User.find({
+    $or: [{ firstName: { $regex: filter } }, { lastName: { $regex: filter } }],
+  });
+  res.json({
+    user: f.map((user) => ({
+      username: user.username,
+      firstName: user.firstName,
+      lastName: user.lastName,
+      _id: user._id,
+    })),
+  });
+};
+
+module.exports = { signup, signin, update, find };
