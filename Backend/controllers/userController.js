@@ -1,4 +1,5 @@
 const User = require("../models/user");
+const Account = require("../models/account");
 const bcrypt = require("bcrypt");
 var jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
@@ -39,8 +40,19 @@ const signup = async (req, res) => {
       username,
       password: hashed,
     });
+
     console.log(add);
     const userId = add._id;
+
+    //Lets cerate Account for user
+    const account = await Account.create({
+      userId,
+      balance: 1 + Math.random() * 10000,
+    });
+    req.session.user = add;
+    console.log(`New User ${add} created`);
+    res.status(200).send({ status: "OK" });
+
     var token = jwt.sign({ userId }, JWT_SECRET);
     res.status(200).send({
       msg: "User Created Successfully",
@@ -92,7 +104,6 @@ const updatebody = z.object({
 });
 const update = async (req, res) => {
   const { success, data: parsedData } = updatebody.safeParse(req.body);
-  // const { firstName, lastName, password } = parsedData;
   if (!success) {
     res.status(411).json({
       message: "Error while updating information",
