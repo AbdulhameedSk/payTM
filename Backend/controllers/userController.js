@@ -92,7 +92,7 @@ const updatebody = z.object({
 });
 const update = async (req, res) => {
   const { success, data: parsedData } = updatebody.safeParse(req.body);
-  const { firstName, lastName, password } = parsedData;
+  // const { firstName, lastName, password } = parsedData;
   if (!success) {
     res.status(411).json({
       message: "Error while updating information",
