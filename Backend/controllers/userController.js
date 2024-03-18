@@ -59,8 +59,9 @@ const signup = async (req, res) => {
       token: token,
     });
   } catch (error) {
-    res.status(411).send({
-      msg: "username already taken / Incorrect inputs",
+    console.error(error);
+    res.status(500).send({
+      msg: "An error occurred while processing your request",
     });
   }
 };
@@ -97,6 +98,7 @@ const signin = async (req, res) => {
   const token = jwt.sign({ userId }, JWT_SECRET);
   return res.status(200).send({ token, message: "LoggedIn successfully" });
 };
+
 const updatebody = z.object({
   firstName: z.string(),
   lastName: z.string(),

@@ -1,5 +1,8 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const express = require("express");
+const app = express();
+app.use(express.json()); // for parsing application/json
 
 const authMiddleware = async (req, res, next) => {
   const authHeader = req.headers.authorization;
