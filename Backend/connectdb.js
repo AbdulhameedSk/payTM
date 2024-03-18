@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 require("dotenv").config();
-const chalk = require("chalk");
+const colors = require("colors");
+
 const connect = async () => {
-  mongoose
-    .connect(process.env.MONGO_URL)
-    .then(console.log("CONNECTED" + chalk.bgGreen(mongoose.connection.host)))
-    .catch((err) => console.log("Mongo Connection Error"+chalk.bgRed(err)));
+  try {
+    await mongoose.connect(process.env.MONGO_URL);
+    console.log("CONNECTED".bgGreen, mongoose.connection.host.bgGreen);
+  } catch (err) {
+    console.log("Mongo Connection Error".bgRed, err.message.bgRed);
+  }
 };
-export default connect;
+
+module.exports = connect;
