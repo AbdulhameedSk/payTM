@@ -8,6 +8,9 @@ const balance = async (req, res) => {
     const account = await Account.findOne({
       userId: req.userId,
     });
+    if (!account) {
+      return res.status(404).json({ msg: "Account not found" });
+    }
     console.log(req.userId);
     console.log(account);
     res.json({
