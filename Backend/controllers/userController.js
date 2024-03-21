@@ -40,17 +40,15 @@ const signup = async (req, res) => {
       password: hashed,
     });
 
-    console.log(add);
     const userId = add._id;
 
     //Lets cerate Account for user
-    const account = await Account.create({
+    await Account.create({
       userId,
       balance: 1 + Math.random() * 10000,
     });
-    req.session.user = add;
+
     console.log(`New User ${add} created`);
-    res.status(200).send({ status: "OK" });
 
     var token = jwt.sign({ userId }, JWT_SECRET);
     res.status(200).send({

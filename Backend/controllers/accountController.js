@@ -21,7 +21,7 @@ const transfer = async (req, res) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
-    var toAccount = await Account.findOne({ userId: to }); // Corrected variable name
+    const toAccount = await Account.findOne({ userId: to });
 
     if (!toAccount) {
       return res.status(400).send({ msg: "Receiver does not exist" });
