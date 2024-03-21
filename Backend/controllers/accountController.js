@@ -1,12 +1,20 @@
 const express = require("express");
-const Account = require("../models/account");
+const { Account } = require("../models/account");
+const authMiddleware = require("../middlewares/authMiddleware");
 const { default: mongoose } = require("mongoose");
 
 const balance = async (req, res) => {
   try {
-    const account = await Account.findOne({ userId: req.userId });
-    res.status(200).send({ balance: account.balance });
+    const account = await Account.findOne({
+      userId: req.userId,
+    });
+    console.log(req.userId);
+    console.log(account);
+    res.json({
+      balance: account.balance,
+    });
   } catch (e) {
+    console.log(e);
     res.status(500).send({ msg: "Internal Server Error" });
   }
 };
