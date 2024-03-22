@@ -1,13 +1,5 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
-const express = require("express");
-const app = express();
-app.use((err, req, res, next) => {
-  console.error(err.stack);
-  res.status(500).send({ msg: "Internal Server Error" });
-});
-app.use(express.json()); // for parsing application/json
-
 const authMiddleware = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
@@ -28,4 +20,6 @@ const authMiddleware = (req, res, next) => {
   }
 };
 
-module.exports = authMiddleware;
+module.exports = {
+  authMiddleware
+}

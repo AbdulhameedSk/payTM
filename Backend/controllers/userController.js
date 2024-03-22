@@ -10,12 +10,7 @@ const signupBody = z.object({
   firstName: z.string().max(50),
   lastName: z.string().max(50),
   username: z.string().email(),
-  password: z
-    .string()
-    .regex(
-      /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-      "Password must contain at least one uppercase letter, one lowercase letter, one number, and be at least 8 characters long"
-    ),
+  password: z.string(),
 });
 const signup = async (req, res) => {
   try {
