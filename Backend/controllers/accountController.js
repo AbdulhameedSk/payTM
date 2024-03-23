@@ -1,5 +1,5 @@
 const express = require("express");
-const { Account } = require("../models/account");
+const { Account } = require("../models/Account");
 const authMiddleware = require("../middlewares/authMiddleware");
 const { default: mongoose } = require("mongoose");
 
@@ -11,8 +11,6 @@ const balance = async (req, res) => {
     if (!account) {
       return res.status(404).json({ msg: "Account not found" });
     }
-    console.log(req.userId);
-    console.log(account);
     res.json({
       balance: account.balance,
     });
@@ -62,7 +60,9 @@ const transfer = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(500).send({ msg: "Internal Server Error" });
+    res
+      .status(500)
+      .send({ msg: "Internal Server Error While Transferring Money" });
   }
 };
 
