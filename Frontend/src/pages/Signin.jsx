@@ -2,16 +2,15 @@ import { Heading } from "../components/Header";
 import { SubHeading } from "../components/SubHeading";
 import { InputBox } from "../components/InputBox";
 import { ButtonWarning } from "../components/ButtonWarning";
-export const Signup = () => {
+export const Signin = () => {
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white rounded-lg p-8 shadow-md w-1/4">
         <div className="flex flex-col items-center my-2">
-          <Heading label={"Sign Up"} />
-          <SubHeading label={"Enter your information to create your account"} />
+          <Heading label={"Sign In"} />
+          <SubHeading label={"Enter credentials to access your account"} />
         </div>
-        <InputBox name={"Firstname"} boxname={"Enter your Firstname here"} />
-        <InputBox name={"Lastname"} boxname={"Enter your Lastname here"} />
+
         <InputBox
           type={"email"}
           name={"Email"}
@@ -32,9 +31,9 @@ export const Signup = () => {
           />
         </div>
         <ButtonWarning
-          label={"Already have an account?"}
-          buttonText={"Signin"}
-          to={"/signin"}
+          label={"Don't have an account?"}
+          buttonText={"Signup"}
+          to={"/signup"}
         />
       </div>
     </div>
