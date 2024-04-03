@@ -1,9 +1,17 @@
-/* eslint-disable react/no-unknown-property */
-import React from "react";
+import React, { useState, useSyncExternalStore } from "react";
 import { Heading } from "../components/Header";
 import { InputBox } from "../components/InputBox";
 import { SubHeading } from "../components/SubHeading";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { Button } from "../components/Button";
+
 export const SendMoney = () => {
+  const [searchParams] = useSearchParams();
+  const id = searchParams.get("id");
+  const name = searchParams.get("name");
+  const [amount, setAmount] = useState(0);
+
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white rounded-lg p-8 shadow-md w-1/4">
@@ -26,20 +34,41 @@ export const SendMoney = () => {
               ></path>
             </svg>
           </div>
-          <div className="font-black m-2 px-3">Friend's name</div>
+          <div className="font-black m-2 px-3">{name}</div>
         </div>
         <div className="">
           <div className="font-black">Amount (in Rs)</div>
-          <InputBox type={"text"} boxname={"Enter amount"} />
-          <div className="flex justify-center">
-          {" "}
-          {/* Centering the button */}
-          <input
-            className="bg-black text-white px-4 py-2 border border-white rounded my-2 flex items-center justify-center w-full"
-            type="button"
-            value="SignUp"
+          <InputBox
+            type={"text"}
+            boxname={"Enter amount"}
+            onChange={(e) => {
+              setAmount(e.target.value);
+            }}
           />
-        </div>
+          <div className="flex justify-center">
+            <Button
+              onPress={() => {
+                axios
+                  .post(
+                    "http://localhost:3000/api/v1/account/transfer",
+                    {
+                      to: id,
+                      amount,
+                    },
+                    {
+                      headers: {
+                        Authorization: `Bearer ${localStorage.getItem(
+                          "token"
+                        )}`,
+                      },
+                    }
+                  )
+                  .then((res) => console.log(res))
+                  .catch((err) => console.log(err));
+              }}
+              label="SignUp"
+            />
+          </div>
         </div>
       </div>
     </div>
