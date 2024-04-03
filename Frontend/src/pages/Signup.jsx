@@ -5,11 +5,14 @@ import { ButtonWarning } from "../components/ButtonWarning";
 import { useState } from "react";
 import axios from "axios";
 import { Button } from "../components/Button";
+import { useNavigate } from "react-router-dom";
+
 export const Signup = () => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
   return (
     <div className="flex justify-center items-center min-h-screen">
       <div className="bg-white rounded-lg p-8 shadow-md w-1/4">
@@ -75,6 +78,7 @@ export const Signup = () => {
                 }
               );
               localStorage.setItem("token", response.data.token);
+              navigate("/dashboard");
             }}
             label={"SignUp"}
           ></Button>
