@@ -3,7 +3,6 @@ import { SubHeading } from "../components/SubHeading";
 import { InputBox } from "../components/InputBox";
 import { ButtonWarning } from "../components/ButtonWarning";
 import { useState } from "react";
-import React from "react";
 import axios from "axios";
 import { Button } from "../components/Button";
 export const Signup = () => {
